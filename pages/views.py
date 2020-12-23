@@ -1,11 +1,16 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 
-def home_view(*args, **kwargs):
-    return HttpResponse("<h1>Hello World!!!</h1>")
-
-def client_view(*args, **kwargs):
-    return HttpResponse("<h1>More Stuff to Come!</h1>")
-
-def template_view(request,*args, **kwargs): #To test
+def home_view(request,*args, **kwargs):
     return render(request,"home.html",{})
+
+def classes_view(request,*args, **kwargs):
+    return render(request, "classes.html",{})
+
+def about_view(request, *args, **kwargs): 
+    my_context = {
+        "akey":"This is about this site",
+        "anumber": 100,
+        "alist" : [ 123, 456, 789],
+    }
+    return render(request,"about.html", my_context)
