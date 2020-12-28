@@ -14,3 +14,7 @@ def about_view(request, *args, **kwargs):
         "alist" : [ 123, 456, 789],
     }
     return render(request,"about.html", my_context)
+
+def register_view(request,*args, **kwargs):
+    my_context = {}
+    return render(request, "register.html")

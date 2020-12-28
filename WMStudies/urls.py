@@ -1,5 +1,4 @@
 """WMStudies URL Configuration
-
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/3.1/topics/http/urls/
 Examples:
@@ -13,18 +12,28 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.contrib import admin
 from django.urls import path
 
-from pages.views import classes_view
 from pages.views import home_view
+from pages.views import classes_view
 from pages.views import about_view
+from pages.views import register_view
+
+from clients.views import person_detail_view
 
 urlpatterns = [
-    path('',         home_view,        name = "home"),
-    path('home/',    home_view,        name = "home"),
-    path('classes/', classes_view,     name = "classes"),
-    path('about/',   about_view,       name=  "about"),
+    path('',          home_view,          name = "home"),
+    path('home/',     home_view,          name = "home"),
+    path('about/',    about_view,         name=  "about"),
+    path('register/', register_view,      name = "register"),
+
+
+    path('classes/',  classes_view,       name = "classes"),
     
+
+    path('detail/',   person_detail_view, name="detail"),
+
     path('admin/', admin.site.urls),
-]
+] 

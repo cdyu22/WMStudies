@@ -1,19 +1,21 @@
+{% load static %}
 <!DOCTYPE html>
 
 <html>
 <head>
     <title>WMStudies</title>
     <meta charset="utf-8" />
-</head>
+    <meta name="description" content="To allow the user to track the status of classes">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}" />
     
-
+</head>
+ 
 <body>
     <header id="header">
         {% include 'navbar.html' %}
      </header>
-
     {% block content %}
-    REPLACE ME
+    
     {% endblock %}
 </body>
 </html>

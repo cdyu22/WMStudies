@@ -1,10 +1,10 @@
-<ul id = "nav">
-    <li>{% block nav-home %}<a href="{% url 'home' %}">Home</a>{% endblock %}</li> 
-    <!-- For now just goes to Hello World!!! -->
-
-    <li>{% block nav-classes %}<a href="{% url 'classes' %}">Class Search</a>{% endblock %}</li> 
-    <!-- redirects back to test -->
-
-    <li>{% block nav-about %}<a href="{% url 'about' %}">About</a>{% endblock %}</li> 
-</ul>
-
+<div class="inner"></div>
+    <a href="{% url 'home' %}"><strong>WMStudies</strong></a>
+    <nav id = "nav">
+        
+        <a href="{% url 'home' %}">Home</a> <!-- For now just goes to Hello World!!! -->
+        <a href="{% url 'classes' %}">Class Search</a> <!-- redirects back to test -->
+        <a href="{% url 'about' %}">About</a>
+        
+    </nav>
+</div>

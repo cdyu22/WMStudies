@@ -2,44 +2,49 @@
 
 {% block content %}
 
-Hello World.
-{{ request.user }}
-{{ request.user.is_authenticated}}
 
-
-<section id="banner">
+<section id="welcome">
     <div class="inner">
         <header>
-            <h1>Welcome to My Website</h1>
+            <h1><strong>WMStudies</strong></h1>
         </header>
 
-        <div class="flex ">
-
-            <div>
-                <span class="icon fa-car"></span>
-                <h3>Aliquam</h3>
-                <p>Suspendisse amet ullamco</p>
+        {% if request.user.is_authenticated == True %}
+            <div id="logged_in">
+                <h3>Logged in as {{request.user}}</h3>
             </div>
+        {% else %}
+            <div id="logging_in">
+                <form action="#" method="post">
+                    <div class="field_first">
+                        <label for="UserId">UserId</label>
+                        <input name="UserId" id="UserId" type="text" placeholder="UserId">
+                    </div>
 
-            <div>
-                <span class="icon fa-camera"></span>
-                <h3>Elementum</h3>
-                <p>Class aptent taciti ad litora</p>
+                    <div class="field_second">
+                        <label for="Password">Password</label>
+                        <input name="Password" id="Password" type="text" placeholder="Password">
+                    </div>
+
+                    <ul class="actions">
+                        <li><input value="Log In" class="button" type="submit"></li>
+                    </ul>
+                </form>
             </div>
-
-            <div>
-                <span class="icon fa-bug"></span>
-                <h3>Ultrices</h3>
-                <p>Nulla vitae mauris non felis</p>
+            <div id="register">
+                <a href="{% url 'register' %}">Register</a>
             </div>
-
-        </div>
-
-        <footer>
-            <a href="#" class="button">Get Started</a>
-        </footer>
+        {%endif%}
+        <!-- NAVPANEL TOGGLE? -->
     </div>
 </section>
 
+<!-- -------------------------------------------- -->
+
+<section id="instructions">
+Explainin' Stuff
+</section>
+
+<!-- Think of more sections? -->
 
 {% endblock %}

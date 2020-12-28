@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'pages',
+    'clients',
 ]
 
 MIDDLEWARE = [
@@ -124,3 +125,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static') #What we need for production? DIRs is maybe for deployment?
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+    "WMStudies/static"
+]
+
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+)
