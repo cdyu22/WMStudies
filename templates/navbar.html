@@ -1,10 +1,12 @@
-<div class="inner"></div>
-    <a href="{% url 'home' %}"><strong>WMStudies</strong></a>
-    <nav id = "nav">
-        
-        <a href="{% url 'home' %}">Home</a> <!-- For now just goes to Hello World!!! -->
-        <a href="{% url 'classes' %}">Class Search</a> <!-- redirects back to test -->
-        <a href="{% url 'about' %}">About</a>
-        
-    </nav>
-</div>
+<header id="header">
+    <div class="inner">
+        <a href="{% url 'home' %}" class="logo"><strong>WMStudies</strong></a>
+        <ul>
+            <li><a href="{% url 'about' %}">About</a></li>
+            <li><a href="{% url 'classes' %}">Class Search</a></li> <!-- redirects back to test -->
+            <li><a href="{% url 'home' %}">Home</a> </li><!-- For now just goes to Hello World!!! -->
+            
+            
+        </ul>
+    </div>
+</header>
