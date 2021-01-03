@@ -3,47 +3,54 @@
 {% block content %}
 
 
-<section id="welcome">
-    <div class="inner">
-        <header>
-            <h1><strong>WMStudies</strong></h1>
-        </header>
+<section id="content-container">
+        <div class="content-item" id="information">
+            <h1><strong>William & Mary Studies</strong></h1>
+            <div id="textarea">
+                <h3>WMStudies aims to inform you whenever a class you are following opens up.</h3>
+                <p>It does this via webscrapping. Put simply, it manually goes through all of 
+                    the classes and checks to see their status, sending you a message via SMS whenever 
+                    a class you follow changes its status </p>
 
-        {% if request.user.is_authenticated == True %}
-            <div id="logged_in">
-                <h3>Logged in as {{request.user}}</h3>
-            </div>
-        {% else %}
-            <div id="logging_in">
-                <form action="#" method="post">
-                    <div class="field_first">
-                        <label for="UserId">UserId</label>
-                        <input name="UserId" id="UserId" type="text" placeholder="UserId">
-                    </div>
+                <h3>Registration</h3>
+                <p>To start, register your name and phone number, which is needed to send you messages. The 
+                    only time that your phone number will be used is for informing you of class status changes. </p>
 
-                    <div class="field_second">
-                        <label for="Password">Password</label>
-                        <input name="Password" id="Password" type="text" placeholder="Password">
-                    </div>
+                <h3>Classes</h3>
+            </div>
+                
+        </div>
 
-                    <ul class="actions">
-                        <li><input value="Log In" class="button" type="submit"></li>
-                    </ul>
-                </form>
-            </div>
-            <div id="register">
-                <a href="{% url 'register' %}">Register</a>
-            </div>
-        {%endif%}
-        <!-- NAVPANEL TOGGLE? -->
-    </div>
+        <div class="content-item" id="login">
+            {% if request.user.is_authenticated == True %}
+                <div id="logged-in">
+                    <h3><i>Logged in as {{request.user}}</i></h3>
+                </div>
+            {% else %}
+                <div id="logging_in">
+                    <form action="#" method="post">
+                        <div class="field-first">
+                            <label for="UserId">UserId</label> <br>
+                            <input name="UserId" id="UserId" type="text" placeholder="UserId">
+                        </div>
+
+                        <div class="field-second">
+                            <label for="Password">Password</label> <br>
+                            <input name="Password" id="Password" type="text" placeholder="Password">
+                        </div>
+
+                        <input class="login-button" value="Log In" class="button" type="submit"></li>
+                        
+                    </form>
+                    <a id="register-button" href="{% url 'register' %}">Register</a>
+                </div>
+            
+            {%endif%}
+        </div>
 </section>
+
 
 <!-- -------------------------------------------- -->
-
-<section id="instructions">
-Explainin' Stuff
-</section>
 
 <!-- Think of more sections? -->
 

@@ -1,12 +1,8 @@
-<header id="header">
-    <div class="inner">
-        <a href="{% url 'home' %}" class="logo"><strong>WMStudies</strong></a>
-        <ul>
-            <li><a href="{% url 'about' %}">About</a></li>
-            <li><a href="{% url 'classes' %}">Class Search</a></li> <!-- redirects back to test -->
-            <li><a href="{% url 'home' %}">Home</a> </li><!-- For now just goes to Hello World!!! -->
-            
-            
-        </ul>
-    </div>
+<header id="navbar-container">
+    <a class="nav-container-item" href="{% url 'home' %}" id="logo"><strong>WMStudies</strong></a>
+    <ul class="nav-container-item" id="non-logo-nav">
+        <li><a class="nav-item" href="{% url 'home' %}">Home</a> </li><!-- For now just goes to Hello World!!! -->   
+        <li><a class="nav-item" href="{% url 'classes' %}">Class Search</a></li> <!-- redirects back to test -->     
+        <li><a class="nav-item" href="{% url 'about' %}">About</a></li>  
+    </ul>
 </header>
