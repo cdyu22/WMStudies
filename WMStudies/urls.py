@@ -15,25 +15,26 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path
+import django.contrib.auth.urls
 
-from pages.views import home_view
-from pages.views import classes_view
-from pages.views import about_view
-from pages.views import register_view
+from pages.views import home_view, classes_view, about_view, register_view,logout_view
+from django.conf.urls import url
+# from users.views import dashboard
 
-from clients.views import person_detail_view
+# from clients.views import person_detail_view
 
 urlpatterns = [
-    path('',          home_view,          name = "home"),
-    path('home/',     home_view,          name = "home"),
+    # url(r"^register/", register_view, name="register"),
+    path('',          home_view,          name = ""),
+    path("home/",     home_view,          name = "home" ),
     path('about/',    about_view,         name=  "about"),
     path('register/', register_view,      name = "register"),
-
+    path('logout/',   logout_view, name = "logout"),
 
     path('classes/',  classes_view,       name = "classes"),
     
 
-    path('detail/',   person_detail_view, name="detail"),
+    # path('detail/',   person_detail_view, name="detail"),
 
     path('admin/', admin.site.urls),
 ] 

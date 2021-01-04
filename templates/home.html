@@ -25,21 +25,25 @@
             {% if request.user.is_authenticated == True %}
                 <div id="logged-in">
                     <h3><i>Logged in as {{request.user}}</i></h3>
+                    
+                    <a id="logout-button" href="{% url 'logout' %}"><i>Logout</i></a>
                 </div>
+                
             {% else %}
                 <div id="logging_in">
-                    <form action="#" method="post">
+                    <form method="post">
+                        {% csrf_token %}
                         <div class="field-first">
-                            <label for="UserId">UserId</label> <br>
-                            <input name="UserId" id="UserId" type="text" placeholder="UserId">
+                            <label for="UserN">Username</label> <br>
+                            <input name="UserId" id="UserId" type="text" placeholder="Username">
                         </div>
 
                         <div class="field-second">
                             <label for="Password">Password</label> <br>
                             <input name="Password" id="Password" type="text" placeholder="Password">
                         </div>
-
-                        <input class="login-button" value="Log In" class="button" type="submit"></li>
+                        
+                        <input class="login-button" value="Login" type="submit"></li>
                         
                     </form>
                     <a id="register-button" href="{% url 'register' %}">Register</a>

@@ -80,6 +80,7 @@ body {
         text-decoration: none;
         margin: 0;
         padding:inherit;
+        
     }
         #information{
             width:50em;
@@ -102,12 +103,26 @@ body {
             justify-content: center;
 
             background:#F0B323;
+            
         }
 
             #logged-in{
+                display:flex;
+                flex-direction: column;
                 font-size: .75em;
                 align-self: center;
+                margin:0;
+                padding:0;
             }
+                #logout-button{
+                    align-self:center;
+                    font-size: .9em;
+                    text-decoration: none;
+                    color:black;
+                }
+                    #logout-button:hover{
+                        color:white;
+                    }
 
             #logging_in{
                 font-size: .75em;
