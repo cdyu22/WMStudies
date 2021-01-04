@@ -1,4 +1,4 @@
-from pages.forms import CustomUserCreationForm
+from .forms import CustomUserCreationForm, UserAdminCreationForm
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
@@ -35,9 +35,10 @@ def about_view(request, *args, **kwargs):
 def register_view(request, *args, **kwargs):
     my_context = {}
     if request.method == "GET":
-        return render(request, "register.html", {"form": CustomUserCreationForm})
+        return render(request, "register.html", {"form": UserAdminCreationForm})
     elif request.method == "POST":
-        form = CustomUserCreationForm(request.POST)
+        form = UserAdminCreationForm(request.POST)
+        print(request.POST)
         if form.is_valid():
             user = form.save()
             login(request,user)
