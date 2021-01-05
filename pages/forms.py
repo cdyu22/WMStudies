@@ -50,10 +50,11 @@ class UserAdminCreationForm(forms.ModelForm):
     """
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
     password2 = forms.CharField(label='Password confirmation', widget=forms.PasswordInput)
+    phone_number = forms.CharField()
 
     class Meta:
         model = User
-        fields = ('username',)
+        fields = ('username','phone_number',)
 
     def clean_password2(self):
         # Check that the two password entries match
@@ -67,6 +68,7 @@ class UserAdminCreationForm(forms.ModelForm):
         # Save the provided password in hashed format
         user = super(UserAdminCreationForm, self).save(commit=False)
         user.set_password(self.cleaned_data["password1"])
+        
         if commit:
             user.save()
         return user

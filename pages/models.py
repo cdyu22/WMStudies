@@ -87,7 +87,7 @@ from django.contrib.auth.models import (
 )
 
 class UserManager(BaseUserManager):
-    def create_user(self, username, password=None):
+    def create_user(self, username, password=None, phone_number=None):
         """
         Creates and saves a User with the given email and password.
         """
@@ -97,32 +97,38 @@ class UserManager(BaseUserManager):
         user = self.model(
             username= username,
             password=password,
+            phone_number=phone_number,
         )
 
         user.set_password(password)
+        user.phone_number = phone_number
         user.save(using=self._db)
         return user
 
-    def create_staffuser(self, username, password):
+    def create_staffuser(self, username, password,phone_number):
         """
         Creates and saves a staff user with the given email and password.
         """
         user = self.create_user(
             username,
             password=password,
+            phone_number=phone_number,
         )
         user.staff = True
+        user.phone_number = phone_number
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, username, password):
+    def create_superuser(self, username, password,phone_number):
         """
         Creates and saves a superuser with the given email and password.
         """
         user = self.create_user(
             username,
             password=password,
+            phone_number=phone_number,
         )
+        user.phone_number = phone_number
         user.staff = True
         user.admin = True
         user.save(using=self._db)
@@ -135,9 +141,10 @@ class User(AbstractBaseUser):
         verbose_name='Student Username',
         max_length=32,
         unique=True,
-        default="HOLDIN"
+        default="Username"
     )
     USERNAME_FIELD = 'username'
+    phone_number = models.CharField(max_length=12,default="Default")
 
     # password= models.CharField(max_length=16)
     active = models.BooleanField(default=True)
@@ -145,7 +152,7 @@ class User(AbstractBaseUser):
     admin = models.BooleanField(default=False) # a superuser
     # notice the absence of a "Password field", that is built in.
 
-    REQUIRED_FIELDS = [] # Email & Password are required by default.
+    REQUIRED_FIELDS = ['phone_number'] # Email & Password are required by default.
     def get_full_name(self):
         # The user is identified by their email address
         return self.username
@@ -166,6 +173,9 @@ class User(AbstractBaseUser):
         "Does the user have permissions to view the app `app_label`?"
         # Simplest possible answer: Yes, always
         return True
+
+    def set_phone_number(self,phone_number):
+        self.phone_number = phone_number
 
     @property
     def is_staff(self):
