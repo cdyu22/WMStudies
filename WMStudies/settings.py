@@ -40,9 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    
-    'pages',
-    'scrapping',
+    'MODULE_users',
+    'MODULE_pages',
+    'MODULE_scraping',
 ]
 
 MIDDLEWARE = [
@@ -137,4 +137,4 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
 
-AUTH_USER_MODEL = "pages.User"
+AUTH_USER_MODEL = "MODULE_users.User"

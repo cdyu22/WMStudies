@@ -1,15 +1,7 @@
-from django.contrib.auth.forms import UserCreationForm
-
-class CustomUserCreationForm(UserCreationForm):
-    class Meta(UserCreationForm.Meta):
-        fields = UserCreationForm.Meta.fields + ("email",)
-
-# accounts.forms.py
 from django import forms
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 
 from .models import User
-
 
 class RegisterForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput)
@@ -33,14 +25,6 @@ class RegisterForm(forms.ModelForm):
         if password and password2 and password != password2:
             raise forms.ValidationError("Passwords don't match")
         return password2
-
-    # def save(self, commit=True):
-    #     # Save the provided password in hashed format
-    #     user = super(RegisterForm, self).save(commit=False)
-    #     user.set_password("password1")
-    #     if commit:
-    #         user.save()
-    #     return user
 
 
 class UserAdminCreationForm(forms.ModelForm):

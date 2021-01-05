@@ -25,8 +25,9 @@
             {% if request.user.is_authenticated == True %}
                 <div id="logged-in">
                     <h3><i>Logged in as {{request.user}}</i></h3>
-                    
                     <a id="logout-button" href="{% url 'logout' %}"><i>Logout</i></a>
+
+                    
                 </div>
                 
             {% else %}
@@ -47,10 +48,19 @@
                         
                     </form>
                     <a id="register-button" href="{% url 'register' %}">Register</a>
+                    
+                    
                 </div>
-            
+                {% if messages %}
+                <p id="messages">
+                    {% for message in messages %}
+                    {{ message }}
+                    {% endfor %}
+                </p>
+                {% endif %}
             {%endif%}
         </div>
+
 </section>
 
 
