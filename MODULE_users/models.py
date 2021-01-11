@@ -67,14 +67,13 @@ class User(AbstractBaseUser):
     )
     USERNAME_FIELD = 'username'
     phone_number = models.CharField(max_length=12,default="Default")
-
-    # password= models.CharField(max_length=16)
     active = models.BooleanField(default=True)
     staff = models.BooleanField(default=False) # a admin user; non super-user
     admin = models.BooleanField(default=False) # a superuser
     # notice the absence of a "Password field", that is built in.
 
     REQUIRED_FIELDS = ['phone_number'] # Email & Password are required by default.
+
     def get_full_name(self):
         # The user is identified by their email address
         return self.username

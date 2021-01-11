@@ -7,9 +7,14 @@ class Course(models.Model): #The class that will stand as a class.
     # Level + Section + Course name #SUBJECT OPTION IS REDUNDENT
     # Status
     # Amount of Followers? Could this create the subset of followed classes? Skip if 0?
-    pass
+    CRN = models.IntegerField()
+    level = models.CharField(max_length=16)
+    section = models.CharField(max_length=16)
+    course_name = models.CharField(max_length=32)
+    status = models.BooleanField(default=False)
+    #followers = models.Integerfield()
 
 class StudentTracker(models.Model): #The model hat will be one student tracking that class.
-    # CRN (How the scraper identifies the student)
-    # Student Username (How the student (client-side) identifies their CRNS)
-    pass
+    CRNTracker = models.IntegerField()
+    user = models.CharField(max_length=32)
+    user_number = models.CharField(max_length=10)

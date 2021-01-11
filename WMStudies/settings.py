@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 import os.path
+from celery import Celery
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -138,3 +139,19 @@ STATICFILES_FINDERS = (
 )
 
 AUTH_USER_MODEL = "MODULE_users.User"
+
+#Celery https://codeburst.io/making-a-web-scraping-application-with-python-celery-and-django-23162397c0b6
+os.environ.setdefault('DJANGO_SETTINGS_MODULE','WMStudies.settings')
+app = Celery('WMStudies')
+app.conf.timezone = 'EST'
+app.config_from_object("django.conf:settings", namespace="CELERY")
+app.autodiscover_tasks()
+
+#For message broker
+CELERY_BROKER_URL = 'amqp://localhost:5672'
+CELERY_RESULT_BACKEND = 'amqp://localhost:5672'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'EST'
+
