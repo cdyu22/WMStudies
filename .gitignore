@@ -1,2 +1,4 @@
-.secrets
-.test
+WMStudies/secrets.py
+WMStudies/test.py
+secrets/
+secrets/**
