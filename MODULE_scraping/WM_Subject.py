@@ -11,16 +11,22 @@ from bs4 import BeautifulSoup
 
 class Subject_Scraper:
     def __init__( self, term, link, token, user_key ):
+        print("INITIALIZING SUBJECT SCRAPER")
         self.__link = link
         self.__token = token
         self.__user_key = user_key
 
         self.__courselist = 'https://courselist.wm.edu/courselist/'
+
         self.__term = ""
         self.__get_term(str(term)) 
         #Declares self.__term: What term it is
 
-        self.__subjects = [""]
+        self.__setup()
+       
+    def __setup( self ):
+        print("SETTING UP THE SCRAPER")
+        self.subjects = [""]
         self.__get_subjects()
         #Fills out a list with all of the subjects
 
@@ -30,11 +36,11 @@ class Subject_Scraper:
         #Gets all of the courses, stores the CRN in a dictionary, then stores the CRNs in a dictionary with their subjects as keys
 
     def search( self ):
-        while ( True ):
-            for subject_parser in self.__subjects:
+        print("SEARCHING!!!")
+        try:
+            for subject_parser in self.subjects:
                 webpage = f'https://courselist.wm.edu/courselist/courseinfo/searchresults?term_code={self.__term}&term_subj={subject_parser}&attr=0&attr2=0&levl=UG&status=0&ptrm=0&search=Search'
                 page = BeautifulSoup( requests.get( webpage ).text, 'html.parser')
-                time.sleep(2)
                 for key in self.__subjects_CRN[subject_parser]:
                     element = page.find( text = key )
                     for j in range( 31 ):
@@ -43,7 +49,10 @@ class Subject_Scraper:
                     if ( self.__courses[ key ][ 3 ] != element):
                         self.__courses[ key ][ 3 ] = element
                         self.__status_change(key)
-                time.sleep(3)
+        except Exception as e:
+            print(e)
+            self.__setup()
+        print("Done searching")
             
 
     def __status_change( self, key ):
@@ -55,7 +64,7 @@ class Subject_Scraper:
     
 
     def __get_courses( self ):
-        for subject_option in self.__subjects:  
+        for subject_option in self.subjects:  
             webpage = f'https://courselist.wm.edu/courselist/courseinfo/searchresults?term_code={self.__term}&term_subj={subject_option}&attr=0&attr2=0&levl=UG&status=0&ptrm=0&search=Search'
 
             page = BeautifulSoup( requests.get( webpage ).text, 'html.parser')
@@ -125,11 +134,11 @@ class Subject_Scraper:
         count = 0
         for option in subject_options.find_all('option'):
             count += 1
-        self.__subjects = [""] * (count - 1)
+        self.subjects = [""] * (count - 1)
 
         index = 0
         for option in subject_options.find_all('option'):
             if(option['value'] == "0"):
                 continue
-            self.__subjects[index] = option['value']
+            self.subjects[index] = option['value']
             index += 1
