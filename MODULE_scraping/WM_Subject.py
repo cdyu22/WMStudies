@@ -10,12 +10,8 @@ from bs4 import BeautifulSoup
 #TODO:: DELETE IF ZERO
 
 class Subject_Scraper:
-    def __init__( self, term, link, token, user_key ):
+    def __init__( self, term ):
         print("INITIALIZING SUBJECT SCRAPER")
-        self.__link = link
-        self.__token = token
-        self.__user_key = user_key
-
         self.__courselist = 'https://courselist.wm.edu/courselist/'
 
         self.__term = ""
@@ -59,9 +55,45 @@ class Subject_Scraper:
         name = self.__courses[ key ][ 1 ] + self.__courses[ key ][ 2 ]
         status = self.__courses[ key ][3]
         message = name + " is " + status + " " + time.ctime() 
-        req = requests.post(self.__link, data = {'token' : self.__token, 'user' : self.__user_key, 'message' : message})
+        # req = requests.post(self.__link, data = {'token' : self.__token, 'user' : self.__user_key, 'message' : message})
+        print("STATUS CHANGE!!! " + message)
 
     
+
+    #Setup
+
+    def __get_term( self, term ):
+        tmp_page = BeautifulSoup( requests.get( self.__courselist ).text, 'html.parser')
+        term_options = tmp_page.find(id = "term_code")
+
+        terms = [""] * 4
+        index = 0
+
+        for option in term_options.find_all('option'):
+            terms[index] = option['value']
+            index += 1
+
+        year_list = list(terms[0])
+        del year_list[4]
+        del year_list[4]
+
+        self.__term = "".join(year_list) + term + '0'
+
+    def __get_subjects(self):
+        tmp_page = BeautifulSoup( requests.get( self.__courselist ).text, 'html.parser')
+        subject_options = tmp_page.find(id = "term_subj")
+
+        count = 0
+        for option in subject_options.find_all('option'):
+            count += 1
+        self.subjects = [""] * (count - 1)
+
+        index = 0
+        for option in subject_options.find_all('option'):
+            if(option['value'] == "0"):
+                continue
+            self.subjects[index] = option['value']
+            index += 1
 
     def __get_courses( self ):
         for subject_option in self.subjects:  
@@ -109,36 +141,3 @@ class Subject_Scraper:
                     tmp_list[index] = key
                     index += 1
             self.__subjects_CRN[subject_option] = tmp_list
-
-    def __get_term( self, term ):
-        tmp_page = BeautifulSoup( requests.get( self.__courselist ).text, 'html.parser')
-        term_options = tmp_page.find(id = "term_code")
-
-        terms = [""] * 4
-        index = 0
-
-        for option in term_options.find_all('option'):
-            terms[index] = option['value']
-            index += 1
-
-        year_list = list(terms[0])
-        del year_list[4]
-        del year_list[4]
-
-        self.__term = "".join(year_list) + term + '0'
-
-    def __get_subjects(self):
-        tmp_page = BeautifulSoup( requests.get( self.__courselist ).text, 'html.parser')
-        subject_options = tmp_page.find(id = "term_subj")
-
-        count = 0
-        for option in subject_options.find_all('option'):
-            count += 1
-        self.subjects = [""] * (count - 1)
-
-        index = 0
-        for option in subject_options.find_all('option'):
-            if(option['value'] == "0"):
-                continue
-            self.subjects[index] = option['value']
-            index += 1

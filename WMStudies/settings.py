@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'MODULE_users',
     'MODULE_pages',
     'MODULE_scraping',
+    'MODULE_API',
 ]
 
 MIDDLEWARE = [
