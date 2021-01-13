@@ -1,5 +1,6 @@
 import time
 import requests
+import threading
 from bs4 import BeautifulSoup
 
 from .models import Course
@@ -18,28 +19,29 @@ class Subject_Scraper:
 
         self.__setup()
 
+        t = threading.Thread(target= self.search,daemon=True).start()
+
     def search( self ):
-        print("SEARCHING!!!")
-        try:
-            for subject_parser in self.subjects:
-                webpage = f'https://courselist.wm.edu/courselist/courseinfo/searchresults?term_code={self.__term}&term_subj={subject_parser}&attr=0&attr2=0&levl=UG&status=0&ptrm=0&search=Search'
-                page = BeautifulSoup( requests.get( webpage ).text, 'html.parser')
-                for key in self.__subjects_CRN[subject_parser]:
-                    element = page.find( text = key )
-                    for j in range( 31 ):
-                        element = element.next
+        while(True):
+            print("SEARCHING!!!")
+            try:
+                for subject_parser in self.subjects:
+                    webpage = f'https://courselist.wm.edu/courselist/courseinfo/searchresults?term_code={self.__term}&term_subj={subject_parser}&attr=0&attr2=0&levl=UG&status=0&ptrm=0&search=Search'
+                    page = BeautifulSoup( requests.get( webpage ).text, 'html.parser')
+                    for key in self.__subjects_CRN[subject_parser]:
+                        element = page.find( text = key )
+                        for j in range( 31 ):
+                            element = element.next
 
-                    if ( self.__courses[ key ][ 3 ] != element):
-                        self.__courses[ key ][ 3 ] = element
-                        self.__status_change(key)
-                time.sleep(1)
+                        if ( self.__courses[ key ][ 3 ] != element):
+                            self.__courses[ key ][ 3 ] = element
+                            self.__status_change(key)
 
-        
-        #TODO: Instead of just setting it up, delete that particular model.
-        except Exception as e:
-            print(e)
-            self.__setup()
-        print("Done searching")
+            
+            except Exception as e:
+                print(e)
+                self.__setup()
+            print("Done searching")
             
 
     def __status_change( self, key ):
@@ -151,8 +153,14 @@ class Subject_Scraper:
         
         if len(list(Course.objects.all())) == 0:
             self.database()
+        print("Setup Finish")
     
     def database( self ):
+        print("Setting up database")
+        if len(list(Course.objects.all())) != 0:
+            for x in Course.objects.all().iterator():
+                x.delete()
+
         for subject_parser in self.subjects: #assume subjects is set up
             webpage = f'https://courselist.wm.edu/courselist/courseinfo/searchresults?term_code={self.__term}&term_subj={subject_parser}&attr=0&attr2=0&levl=UG&status=0&ptrm=0&search=Search'
             page = BeautifulSoup( requests.get( webpage ).text, 'html.parser')
