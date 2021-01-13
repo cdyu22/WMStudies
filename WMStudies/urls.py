@@ -17,5 +17,8 @@ urlpatterns = [
 
 #Can run code here ONCE
 #Saving this, can loop through stuff
-from MODULE_users.models import User
-print(User.objects.all())
+# from MODULE_users.models import User
+# from MODULE_scraping.WM_Subject import Subject_Scraper
+# print(User.objects.all())
+# c = Subject_Scraper(2)
+
