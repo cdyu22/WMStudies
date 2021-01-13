@@ -23,12 +23,11 @@ class Subject_Scraper:
     def __setup( self ):
         print("SETTING UP THE SCRAPER")
         self.subjects = [""]
-        self.__get_subjects()
-        #Fills out a list with all of the subjects
-
         self.__courses = {}
         self.__subjects_CRN = {}
-        self.__get_courses()
+        
+        self.__get_subjects()
+        #Fills out a list with all of the subjects
         #Gets all of the courses, stores the CRN in a dictionary, then stores the CRNs in a dictionary with their subjects as keys
 
     def search( self ):
@@ -79,41 +78,46 @@ class Subject_Scraper:
 
         self.__term = "".join(year_list) + term + '0'
 
-    def __get_subjects(self):
-        tmp_page = BeautifulSoup( requests.get( self.__courselist ).text, 'html.parser')
-        subject_options = tmp_page.find(id = "term_subj")
-
-        count = 0
-        for option in subject_options.find_all('option'):
-            count += 1
-        self.subjects = [""] * (count - 1)
-
-        index = 0
-        for option in subject_options.find_all('option'):
-            if(option['value'] == "0"):
+    def __get_subjects( self ):
+        #Get to the HTML homepage with the subjects
+        homepage = BeautifulSoup( requests.get( self.__courselist ).text, 'html.parser' )
+        subject_options = homepage.find( id = "term_subj" )
+        
+        #Count the amount of subjects to allocate the correct amount of spaces to the list
+        subject_count = 0
+        for option in subject_options.find_all( 'option' ):
+            subject_count += 1
+        self.subjects = [ "" ] * ( subject_count - 1 )
+        
+        #Allocate the spaces. 
+        subject_index = 0
+        for option in subject_options.find_all( 'option' ):
+            #There exists an option value of 0 to signify all subjects.
+            if option[ 'value' ] == "0":
                 continue
-            self.subjects[index] = option['value']
-            index += 1
+            self.subjects[ subject_index ] = option[ 'value' ]
+            subject_index += 1
 
-    def __get_courses( self ):
+        #Finding the classes
         for subject_option in self.subjects:  
             webpage = f'https://courselist.wm.edu/courselist/courseinfo/searchresults?term_code={self.__term}&term_subj={subject_option}&attr=0&attr2=0&levl=UG&status=0&ptrm=0&search=Search'
 
             page = BeautifulSoup( requests.get( webpage ).text, 'html.parser')
 
-            count = 0
+            class_amt = 0
             CRN = 0
             section = ""
             course_name = ""
             status = 'OPEN'
 
             element = page.find( id = "results" )
-            for i in range(57):
+            for i in range( 57 ):
                 element = element.next
 
+            #After this, will have all courses for that subject
             try:
                 while( True ):
-                    CRN = int(element)
+                    CRN = int( element )
 
                     element = element.next.next.next.next
                     section = element
@@ -129,15 +133,70 @@ class Subject_Scraper:
 
                     element = element.next.next.next.next.next.next
                     
-                    count += 1
+                    class_amt += 1
 
+            #Will throw ValueError at the end of the HTML table
             except ValueError:
                 pass
             
-            tmp_list = [0] * count
+            
+            subject_list = [ 0 ] * class_amt
             index = 0
             for key in self.__courses:
-                if self.__courses[key][0] == subject_option:
-                    tmp_list[index] = key
+                if self.__courses[ key ][ 0 ] == subject_option:
+                    subject_list[ index ] = key
                     index += 1
-            self.__subjects_CRN[subject_option] = tmp_list
+            self.__subjects_CRN[subject_option] = subject_list
+
+    # def __get_courses( self ):
+    #     for subject_option in self.subjects:  
+    #         webpage = f'https://courselist.wm.edu/courselist/courseinfo/searchresults?term_code={self.__term}&term_subj={subject_option}&attr=0&attr2=0&levl=UG&status=0&ptrm=0&search=Search'
+
+    #         page = BeautifulSoup( requests.get( webpage ).text, 'html.parser')
+
+    #         class_amt = 0
+    #         CRN = 0
+    #         section = ""
+    #         course_name = ""
+    #         status = 'OPEN'
+
+    #         element = page.find( id = "results" )
+    #         for i in range( 57 ):
+    #             element = element.next
+
+    #         #After this, will have all courses for that subject
+    #         try:
+    #             while( True ):
+    #                 CRN = int( element )
+
+    #                 element = element.next.next.next.next
+    #                 section = element
+
+    #                 element = element.next.next.next.next.next.next
+    #                 course_name = element
+
+    #                 for j in range( 3 ):
+    #                     element = element.next.next.next.next.next.next.next
+    #                 status = element
+
+    #                 self.__courses[ CRN ] =  [ subject_option, section, course_name, status ]
+
+    #                 element = element.next.next.next.next.next.next
+                    
+    #                 class_amt += 1
+
+    #         #Will throw ValueError at the end of the HTML table
+    #         except ValueError:
+    #             pass
+            
+            
+    #         subject_list = [ 0 ] * class_amt
+    #         index = 0
+    #         for key in self.__courses:
+    #             if self.__courses[ key ][ 0 ] == subject_option:
+    #                 subject_list[ index ] = key
+    #                 index += 1
+    #         self.__subjects_CRN[subject_option] = subject_list
+
+            #TODO: Can probably try to delete all class instances with: Course.objects.all().delete(). May have to iterate with
+            # for x in MyTable.objects.all().iterator(): x.delete() 

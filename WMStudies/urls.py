@@ -16,3 +16,6 @@ urlpatterns = [
 ] 
 
 #Can run code here ONCE
+#Saving this, can loop through stuff
+from MODULE_users.models import User
+print(User.objects.all())
