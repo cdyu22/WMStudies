@@ -7,10 +7,6 @@ from .models import Course
 # By Connor Yu: For utilizing the BeautifulSoup package to scrape course
 # registration status from the web.
 
-#TODO:: COMBINE THIS AND CLASS. SHOULD HAVE ALL SUBJECTS, BUT NO STARTING CRNS. ONLY SCAN CRNS IN SYSTEM.
-#TODO:: CRN DICTIONARY (SELF.__COURSES) SHOULD HAVE A WATCHING ENTRY, IF WATCH, START AT 1, IF SOMEONE ELSE WATCHES, ADD 1, 
-#TODO:: DELETE IF ZERO
-
 class Subject_Scraper:
     def __init__( self, term ):
         print("INITIALIZING SUBJECT SCRAPER")
@@ -21,8 +17,6 @@ class Subject_Scraper:
         #Declares self.__term: What term it is
 
         self.__setup()
-       
-    
 
     def search( self ):
         print("SEARCHING!!!")
@@ -39,6 +33,7 @@ class Subject_Scraper:
                         self.__courses[ key ][ 3 ] = element
                         self.__status_change(key)
                 time.sleep(1)
+
         
         #TODO: Instead of just setting it up, delete that particular model.
         except Exception as e:
@@ -82,7 +77,7 @@ class Subject_Scraper:
         self.__courses = {}
         self.__subjects_CRN = {}
         
-        Course.objects.all().delete()
+        
 
         #Get to the HTML homepage with the subjects
         homepage = BeautifulSoup( requests.get( self.__courselist ).text, 'html.parser' )
@@ -134,16 +129,6 @@ class Subject_Scraper:
                         element = element.next.next.next.next.next.next.next
                     status = element
 
-                    #Will add here.
-                    sqlite_record = Course(
-                        CRNR = CRN,
-                        subject = subject_iteration,
-                        sectionR = section,
-                        course_nameR = course_name,
-                        statusR = status,
-                    )
-
-                    sqlite_record.save()
                     
                     self.__courses[ CRN ] =  [ subject_iteration, section, course_name, status ]
 
@@ -163,4 +148,23 @@ class Subject_Scraper:
                     subject_list[ index ] = key
                     index += 1
             self.__subjects_CRN[subject_iteration] = subject_list
+        
+        if len(list(Course.objects.all())) == 0:
+            self.database()
+    
+    def database( self ):
+        for subject_parser in self.subjects: #assume subjects is set up
+            webpage = f'https://courselist.wm.edu/courselist/courseinfo/searchresults?term_code={self.__term}&term_subj={subject_parser}&attr=0&attr2=0&levl=UG&status=0&ptrm=0&search=Search'
+            page = BeautifulSoup( requests.get( webpage ).text, 'html.parser')
+            for key in self.__subjects_CRN[subject_parser]:
+                sqlite_record = Course(
+                    CRN = key,
+                    subject = self.__courses[key][0],
+                    section = self.__courses[key][1],
+                    course_name = self.__courses[key][2],
+                    status = self.__courses[key][3],
+                )
 
+                sqlite_record.save()
+    
+        

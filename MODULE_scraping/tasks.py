@@ -4,7 +4,7 @@ from celery import app
 from .WM_Subject import Subject_Scraper
 # from secrets.secrets import link, token, user_key
 
-classes = Subject_Scraper(  2 )
+classes = Subject_Scraper( 2 )
 print("IS THIS GETTING THRU???")
 @shared_task
 def scrape():

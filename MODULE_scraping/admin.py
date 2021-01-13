@@ -22,8 +22,8 @@ class UserAdmin(BaseUserAdmin):
             'fields': ('CRN', 'level','section','course_name','status','followers',)}
         ),
     )
-    search_fields = ('CRN',)
-    ordering = ('CRN',)
+    search_fields = ('section',)
+    ordering = ('section',)
     filter_horizontal = ()
 
 
