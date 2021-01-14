@@ -115,3 +115,8 @@ class User(AbstractBaseUser):
     
     objects = UserManager()
 
+
+class StudentTracker(models.Model): #The model that will be one student tracking that class.
+    CRNTracker = models.IntegerField()
+    user = models.CharField(max_length=32)
+    user_number = models.CharField(max_length=10)

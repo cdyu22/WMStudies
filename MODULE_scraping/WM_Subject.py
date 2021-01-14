@@ -14,8 +14,7 @@ class Subject_Scraper:
         self.__courselist = 'https://courselist.wm.edu/courselist/'
 
         self.__term = ""
-        self.__get_term(str(term)) 
-        #Declares self.__term: What term it is
+        self.__get_term(str(term))   #Declares self.__term: What term it is
 
         self.__setup()
 
@@ -97,11 +96,15 @@ class Subject_Scraper:
             #There exists an option value of 0 to signify all subjects.
             if option[ 'value' ] == "0":
                 continue
+
             subject_iteration = option[ 'value' ]
             self.subjects[ subject_index ] = subject_iteration
             subject_index += 1
 
-        #Finding the classes
+            if len(list(Course.objects.all())) != 0:
+                continue
+            
+            #Finding the classes
             webpage = f'https://courselist.wm.edu/courselist/courseinfo/searchresults?term_code={self.__term}&term_subj={subject_iteration}&attr=0&attr2=0&levl=UG&status=0&ptrm=0&search=Search'
            
             page = BeautifulSoup( requests.get( webpage ).text, 'html.parser')
@@ -131,8 +134,15 @@ class Subject_Scraper:
                         element = element.next.next.next.next.next.next.next
                     status = element
 
-                    
-                    self.__courses[ CRN ] =  [ subject_iteration, section, course_name, status ]
+                    sqlite_record = Course(
+                        CRN = CRN,
+                        subject = subject_iteration,
+                        section = section,
+                        course_name = course_name,
+                        status = status,
+                    )
+
+                    sqlite_record.save()
 
                     element = element.next.next.next.next.next.next
                     
@@ -143,36 +153,14 @@ class Subject_Scraper:
                 pass
             
             
-            subject_list = [ 0 ] * class_amt
+            tmp_subject_list = [ 0 ] * class_amt
             index = 0
-            for key in self.__courses:
-                if self.__courses[ key ][ 0 ] == subject_iteration:
-                    subject_list[ index ] = key
+            for key in Course.objects.all().iterator():
+                if key.subject == subject_iteration:
+                    tmp_subject_list[ index ] = key
                     index += 1
-            self.__subjects_CRN[subject_iteration] = subject_list
-        
-        if len(list(Course.objects.all())) == 0:
-            self.database()
-        print("Setup Finish")
-    
-    def database( self ):
-        print("Setting up database")
-        if len(list(Course.objects.all())) != 0:
-            for x in Course.objects.all().iterator():
-                x.delete()
-
-        for subject_parser in self.subjects: #assume subjects is set up
-            webpage = f'https://courselist.wm.edu/courselist/courseinfo/searchresults?term_code={self.__term}&term_subj={subject_parser}&attr=0&attr2=0&levl=UG&status=0&ptrm=0&search=Search'
-            page = BeautifulSoup( requests.get( webpage ).text, 'html.parser')
-            for key in self.__subjects_CRN[subject_parser]:
-                sqlite_record = Course(
-                    CRN = key,
-                    subject = self.__courses[key][0],
-                    section = self.__courses[key][1],
-                    course_name = self.__courses[key][2],
-                    status = self.__courses[key][3],
-                )
-
-                sqlite_record.save()
+            self.__subjects_CRN[subject_iteration] = tmp_subject_list
     
         
+# for x in Course.objects.all().iterator():
+            #     x.delete()

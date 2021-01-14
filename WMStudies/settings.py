@@ -141,14 +141,3 @@ STATICFILES_FINDERS = (
 
 AUTH_USER_MODEL = "MODULE_users.User"
 
-#Celery https://codeburst.io/making-a-web-scraping-application-with-python-celery-and-django-23162397c0b6
-
-
-#For message broker
-# CELERY_BROKER_URL = 'amqp://localhost:5672'
-# CELERY_RESULT_BACKEND = 'amqp://localhost:5672'
-CELERY_ACCEPT_CONTENT = ['application/json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
-CELERY_TIMEZONE = 'UTC'
-
