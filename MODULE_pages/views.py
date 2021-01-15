@@ -39,10 +39,12 @@ def logout_view( request, *args, **kwargs ):
     return redirect( reverse( "home" ) )
 
 
-# TODO:: IMPLEMENT
-
 def classes_view(request,*args, **kwargs):
-    return render(request, "classes.html",{})
+    if request.user.is_authenticated:
+        return render(request, "classes.html",{})
+    else:
+        messages.error( request, 'You must login to access class view.' )
+        return redirect( reverse( "home" ), {} ) 
 
 def about_view(request, *args, **kwargs): 
     my_context = {

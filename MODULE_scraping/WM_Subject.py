@@ -10,7 +10,7 @@ from .models import Course
 
 class Subject_Scraper:
     def __init__( self, term ):
-        print("INITIALIZING SUBJECT SCRAPER")
+        # print("INITIALIZING SUBJECT SCRAPER")
         self.__courselist = 'https://courselist.wm.edu/courselist/'
 
         self.__term = ""
@@ -25,7 +25,7 @@ class Subject_Scraper:
         # print(list(Course.objects.all()))
         # print(self.subjects)
         while(True):
-            print("Searching")
+            print("Searching...")
             for subject_parser in self.subjects:
                 # print(subject_parser + " ", end = '')
                 webpage = f'https://courselist.wm.edu/courselist/courseinfo/searchresults?term_code={self.__term}&term_subj={subject_parser}&attr=0&attr2=0&levl=UG&status=0&ptrm=0&search=Search'
@@ -102,7 +102,7 @@ class Subject_Scraper:
 
         #Fills out a list with all of the subjects
         #Gets all of the courses, stores the CRN in a dictionary, then stores the CRNs in a dictionary with their subjects as keys
-        print("SETTING UP THE SCRAPER")
+        # print("SETTING UP THE SCRAPER")
         self.subjects = [""]
         self.__subjects_CRN = {}
 
@@ -123,7 +123,7 @@ class Subject_Scraper:
             if option[ 'value' ] == "0":
                 continue
 
-            print(option[ 'value' ])
+            # print(option[ 'value' ])
             subject_iteration = option[ 'value' ]
             self.subjects[ subject_index ] = subject_iteration
             subject_index += 1

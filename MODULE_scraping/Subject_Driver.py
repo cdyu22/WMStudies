@@ -1,6 +1,5 @@
 from .WM_Subject import Subject_Scraper
-import sys
-import requests
+# import requests
 
 def scrape():
     while(True):

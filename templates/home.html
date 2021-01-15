@@ -26,8 +26,6 @@
                 <div id="logged-in">
                     <h3><i>Logged in as {{request.user}}</i></h3>
                     <a id="logout-button" href="{% url 'logout' %}"><i>Logout</i></a>
-
-                    
                 </div>
                 
             {% else %}
@@ -52,7 +50,7 @@
                     
                 </div>
                 {% if messages %}
-                <p id="messages">
+                <p id="messages" style="font-size: 10pt;">
                     {% for message in messages %}
                     {{ message }}
                     {% endfor %}

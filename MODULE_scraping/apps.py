@@ -13,7 +13,6 @@ class ScrappingConfig(AppConfig):
         # from .models import Course
 
         from .Subject_Driver import scrape
-        print("RUNNING SCRAPPING CONFIG READY FUNCTIOn")
        
         thread1 = threading.Thread(target=scrape,daemon=True).start()
         # print(Course.objects.get(CRN = 21533).course_name)
