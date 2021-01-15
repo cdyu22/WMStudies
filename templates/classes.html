@@ -4,8 +4,45 @@
 
 <section id="content-course">
     <div class="content-item-course">
-        hello
+        <table>
+            <tr>
+                <th>CRN</th>
+                <th>Section</th>
+                <th>Course Name</th>
+                <th>Status</th>
+            </tr>
+ 
+            {% for class, item in my_context.items %}
+                <tr>
+                    <th>{{class}}</th>
+                    <th>{{item.0}}</th>
+                    <th>{{item.1}}</th>
+                    <th>{{item.2}}</th>
+                </tr>
+            {% endfor %}
+        </table>
+
+        <!-- Hello?
+        {% for item in my_context %}
+            {{item}}
+        {% endfor %}
+        {{ akey }} -->
     </div>
+    
 </section>
 
+<section id="content-course">
+    <form method="post">
+        {% csrf_token %}
+        <div class="CRN_Taker"><input name="CRN" type="text" placeholder="CRN"></div>
+        <input class="CRN_button" value="Submit" type="submit"></li>
+    </form>
+</section>
+{% if messages %}
+<p id="messages" style="font-size: 10pt;">
+    {% for message in messages %}
+    {{ message }}
+    {% endfor %}
+</p>
+{% endif %}
 {% endblock %}
