@@ -16,37 +16,62 @@ class Subject_Scraper:
         self.__term = ""
         self.__get_term(str(term))   #Declares self.__term: What term it is
 
+        
         self.__setup()
 
-        t = threading.Thread(target= self.search,daemon=True).start()
+        self.search()
 
     def search( self ):
+        # print(list(Course.objects.all()))
+        # print(self.subjects)
         while(True):
-            print("SEARCHING!!!")
-            try:
-                for subject_parser in self.subjects:
-                    webpage = f'https://courselist.wm.edu/courselist/courseinfo/searchresults?term_code={self.__term}&term_subj={subject_parser}&attr=0&attr2=0&levl=UG&status=0&ptrm=0&search=Search'
-                    page = BeautifulSoup( requests.get( webpage ).text, 'html.parser')
-                    for key in self.__subjects_CRN[subject_parser]:
-                        element = page.find( text = key )
+            print("Searching")
+            for subject_parser in self.subjects:
+                # print(subject_parser + " ", end = '')
+                webpage = f'https://courselist.wm.edu/courselist/courseinfo/searchresults?term_code={self.__term}&term_subj={subject_parser}&attr=0&attr2=0&levl=UG&status=0&ptrm=0&search=Search'
+                page = BeautifulSoup( requests.get( webpage ).text, 'html.parser')
+                # time.sleep(1)
+                for key in self.__subjects_CRN[subject_parser]:
+                    if key == 0:
+                        continue
+                    element = page.find( text = key )
+
+                    try:
                         for j in range( 31 ):
                             element = element.next
 
-                        if ( self.__courses[ key ][ 3 ] != element):
-                            self.__courses[ key ][ 3 ] = element
+                        # print(element)
+                        # print(Course.objects.get(CRN = key).status)
+                        # print(key)
+                        # print(Course.objects.get(CRN=key).CRN)
+                        # print("Managed to get the above!")
+                        if Course.objects.get(CRN = key).status != element:
+                            update = Course.objects.get(CRN = key)
+                            update.status = element
+                            update.save() 
                             self.__status_change(key)
 
-            
-            except Exception as e:
-                print(e)
-                self.__setup()
-            print("Done searching")
+                    except AttributeError:
+                        spot = self.__subjects_CRN[subject_parser].index(key)
+                        self.__subjects_CRN[subject_parser][spot] = 0
+                        print("THERE WAS AN ATTRIBUTE ERROR")
+                        continue
+
+                    except Exception as e:
+                        print("\nELEMENT WAS: " + element)
+                        print("KEY WAS: " + str(key))
+                        print("SUBJECT WAS: " + subject_parser)
+                        # self.__subjects_CRN[subject_parser][key] = 0 #Removed from search consideration
+                        # print(Course.objects.get(CRN = key).key + " is the course that crashed the search " + subject_parser)
+                        print(e)
+                        print("THERE WAS AN EXCEPTION")
+                        continue
+            # print("Done searching")
             
 
     def __status_change( self, key ):
-        name = self.__courses[ key ][ 1 ] + self.__courses[ key ][ 2 ]
-        status = self.__courses[ key ][3]
-        message = name + " is " + status + " " + time.ctime() 
+        update = Course.objects.get(CRN = key)
+        message = update.section + update.course_name + " is " + update.status + " " + time.ctime()
         # req = requests.post(self.__link, data = {'token' : self.__token, 'user' : self.__user_key, 'message' : message})
         print("STATUS CHANGE!!! " + message)
 
@@ -71,14 +96,15 @@ class Subject_Scraper:
         self.__term = "".join(year_list) + term + '0'
 
     def __setup( self ):
+        count = 0
+        # for x in Course.objects.all().iterator():
+        #     x.delete()
+
         #Fills out a list with all of the subjects
         #Gets all of the courses, stores the CRN in a dictionary, then stores the CRNs in a dictionary with their subjects as keys
         print("SETTING UP THE SCRAPER")
         self.subjects = [""]
-        self.__courses = {}
         self.__subjects_CRN = {}
-        
-        
 
         #Get to the HTML homepage with the subjects
         homepage = BeautifulSoup( requests.get( self.__courselist ).text, 'html.parser' )
@@ -97,12 +123,10 @@ class Subject_Scraper:
             if option[ 'value' ] == "0":
                 continue
 
+            print(option[ 'value' ])
             subject_iteration = option[ 'value' ]
             self.subjects[ subject_index ] = subject_iteration
             subject_index += 1
-
-            if len(list(Course.objects.all())) != 0:
-                continue
             
             #Finding the classes
             webpage = f'https://courselist.wm.edu/courselist/courseinfo/searchresults?term_code={self.__term}&term_subj={subject_iteration}&attr=0&attr2=0&levl=UG&status=0&ptrm=0&search=Search'
@@ -118,22 +142,31 @@ class Subject_Scraper:
             element = page.find( id = "results" )
             for i in range( 19 ):
                 element = element.next.next.next
-
+            
             #After this, will have all courses for that subject
-            try:
-                while( True ):
+            end = True
+            while( end ):
+                #Will throw ValueError at the end of the HTML table
+                try:
                     CRN = int( element )
+                except ValueError as e:
+                    end = False
+                    continue
+                
 
-                    element = element.next.next.next.next
-                    section = element
+                element = element.next.next.next.next
+                section = element
 
-                    element = element.next.next.next.next.next.next
-                    course_name = element
+                element = element.next.next.next.next.next.next
+                course_name = element
 
-                    for j in range( 3 ):
-                        element = element.next.next.next.next.next.next.next
-                    status = element
+                for j in range( 3 ):
+                    element = element.next.next.next.next.next.next.next
+                status = element
 
+                if Course.objects.filter(CRN=CRN).exists():
+                    pass
+                else:   
                     sqlite_record = Course(
                         CRN = CRN,
                         subject = subject_iteration,
@@ -144,23 +177,23 @@ class Subject_Scraper:
 
                     sqlite_record.save()
 
-                    element = element.next.next.next.next.next.next
-                    
-                    class_amt += 1
-
-            #Will throw ValueError at the end of the HTML table
-            except ValueError:
-                pass
+               
+                element = element.next.next.next.next.next.next
+                
+                class_amt += 1
             
-            
+            count += class_amt
             tmp_subject_list = [ 0 ] * class_amt
             index = 0
             for key in Course.objects.all().iterator():
                 if key.subject == subject_iteration:
-                    tmp_subject_list[ index ] = key
+                    tmp_subject_list[ index ] = key.CRN
                     index += 1
             self.__subjects_CRN[subject_iteration] = tmp_subject_list
-    
-        
-# for x in Course.objects.all().iterator():
-            #     x.delete()
+        # print(list(Course.objects.all()))
+        # print(len(list(Course.objects.all())))
+        # print(Course.objects.get(CRN=20003).course_name)
+        # print(self.subjects)
+        # print(count)
+
+        # print(self.__subjects_CRN)
