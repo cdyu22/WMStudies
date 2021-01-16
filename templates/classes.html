@@ -2,6 +2,7 @@
 
 {% block content %}
 
+
 <section id="content-course">
     <div class="content-item-course">
         <table>
@@ -31,18 +32,28 @@
     
 </section>
 
-<section id="content-course">
-    <form method="post">
-        {% csrf_token %}
-        <div class="CRN_Taker"><input name="CRN" type="text" placeholder="CRN"></div>
-        <input class="CRN_button" value="Submit" type="submit"></li>
-    </form>
+<section id="content-course-crn">
+        <div id="CRN-BOX">
+                
+            <form method="post">
+                {% csrf_token %}
+                <div id="CRN-container">
+                    <div class="CRN_Taker"><h4>Add Class</h4><input name="CRN_Taker" type="text" placeholder="CRN" maxlength="5" size="5"></div>                
+                    <div class="CRN_Remover"><h4>Remove Class</h4><input name="CRN_Remover" type="text" placeholder="CRN" maxlength="5"size="5"></div>
+                </div>
+                <input class="CRN_button" value="Submit" type="submit"></li>
+            </form>
+   
+            {% if messages %}
+                <p id="messages" style="font-size: 10pt;">
+                    {% for message in messages %}
+                    {{ message }}
+                    {% endfor %}
+                </p>
+            {% endif %}
+        </div>
+    
 </section>
-{% if messages %}
-<p id="messages" style="font-size: 10pt;">
-    {% for message in messages %}
-    {{ message }}
-    {% endfor %}
-</p>
-{% endif %}
+
+
 {% endblock %}

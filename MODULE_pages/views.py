@@ -35,6 +35,9 @@ def register_view(request, *args, **kwargs):
             user = form.save()
             login( request, user )
             return redirect( reverse( "home" ) )
+        else:
+            messages.error(request, 'Invalid. Need unique username. Phone number should be only 10 numbers.')
+            return redirect( reverse( "register"))
 
 def logout_view( request, *args, **kwargs ):
     logout( request )
@@ -43,7 +46,32 @@ def logout_view( request, *args, **kwargs ):
 
 def classes_view(request,*args, **kwargs):
     if request.user.is_authenticated:
-        
+        if request.method == "POST":
+            CRN_Taker = request.POST.get( 'CRN_Taker' )
+            if CRN_Taker == "":
+                pass
+            elif Course.objects.filter(CRN=CRN_Taker).exists():
+                specified_class = Course.objects.get(CRN=CRN_Taker)
+                to_add = User.objects.get(username=request.user)
+                specified_class.followers.add(to_add)
+            else:
+                messages.error(request, "Added CRN not found!")
+
+            CRN_Remover = request.POST.get( 'CRN_Remover' )
+            if CRN_Remover == "":
+                pass
+            elif Course.objects.filter(CRN=CRN_Remover).exists():
+                specified_class = Course.objects.get(CRN=CRN_Remover)
+                to_remove = User.objects.get(username=request.user)
+                if to_remove.course_set.filter(CRN=CRN_Remover).exists():
+                    specified_class.followers.remove(to_remove)
+                else:
+                    messages.error(request, "User is not following " + CRN_Remover)
+                
+            else:
+                messages.error(request, "Removed CRN not found!")     
+           
+
         my_context = {}
         try: 
             curr_user = User.objects.get(username=request.user)
@@ -57,14 +85,6 @@ def classes_view(request,*args, **kwargs):
         except Exception as e:
             print("EXCEPTION!")
             print(e)
-        if request.method == "POST":
-            CRN = request.POST.get( 'CRN' )
-            if Course.objects.filter(CRN=CRN).exists():
-                specified_class = Course.objects.get(CRN=CRN)
-                to_add = User.objects.get(username=request.user)
-                specified_class.followers.add(to_add)
-            else:
-                messages.error(request, "CRN not found!")
 
         return render( request, "classes.html", {"my_context" : my_context} )
         

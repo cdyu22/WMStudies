@@ -56,17 +56,15 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-
-
 class User(AbstractBaseUser):
     username = models.CharField(
-        verbose_name='Student Username',
+        verbose_name='Username',
         max_length=32,
         unique=True,
         default="Username"
     )
     USERNAME_FIELD = 'username'
-    phone_number = models.CharField(max_length=12,default="Default")
+    phone_number = models.CharField(max_length=10,default="Default")
     active = models.BooleanField(default=True)
     staff = models.BooleanField(default=False) # a admin user; non super-user
     admin = models.BooleanField(default=False) # a superuser

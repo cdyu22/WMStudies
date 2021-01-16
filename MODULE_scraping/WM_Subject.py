@@ -1,10 +1,10 @@
 import time
 import requests
-import threading
 import os
 from bs4 import BeautifulSoup
 
 from .models import Course
+from MODULE_API.send_message import send_message
 
 # By Connor Yu: For utilizing the BeautifulSoup package to scrape course
 # registration status from the web.
@@ -23,12 +23,9 @@ class Subject_Scraper:
         self.search()
 
     def search( self ):
-        # print(list(Course.objects.all()))
-        # print(self.subjects)
         while(True):
             print("Searching... " + str(os.getpid()))
             for subject_parser in self.subjects:
-                # print(subject_parser + " ", end = '')
                 webpage = f'https://courselist.wm.edu/courselist/courseinfo/searchresults?term_code={self.__term}&term_subj={subject_parser}&attr=0&attr2=0&levl=UG&status=0&ptrm=0&search=Search'
                 page = BeautifulSoup( requests.get( webpage ).text, 'html.parser')
                 # time.sleep(1)
@@ -40,12 +37,6 @@ class Subject_Scraper:
                     try:
                         for j in range( 31 ):
                             element = element.next
-
-                        # print(element)
-                        # print(Course.objects.get(CRN = key).status)
-                        # print(key)
-                        # print(Course.objects.get(CRN=key).CRN)
-                        # print("Managed to get the above!")
                         if Course.objects.get(CRN = key).status != element:
                             update = Course.objects.get(CRN = key)
                             update.status = element
@@ -59,21 +50,14 @@ class Subject_Scraper:
                         continue
 
                     except Exception as e:
-                        print("\nELEMENT WAS: " + element)
-                        print("KEY WAS: " + str(key))
-                        print("SUBJECT WAS: " + subject_parser)
-                        # self.__subjects_CRN[subject_parser][key] = 0 #Removed from search consideration
-                        # print(Course.objects.get(CRN = key).key + " is the course that crashed the search " + subject_parser)
-                        print(e)
-                        print("THERE WAS AN EXCEPTION")
+                        send_message(e,2027319090)
                         continue
-            # print("Done searching")
-            
 
     def __status_change( self, key ):
         update = Course.objects.get(CRN = key)
-        message = update.section + update.course_name + " is " + update.status + " " + time.ctime()
-        # req = requests.post(self.__link, data = {'token' : self.__token, 'user' : self.__user_key, 'message' : message})
+        message = update.section + update.course_name + " is " + update.status
+        for user in update.followers.all():
+            send_message(message, user.phone_number)
         print("STATUS CHANGE!!! " + message)
 
 
@@ -191,10 +175,3 @@ class Subject_Scraper:
                     tmp_subject_list[ index ] = key.CRN
                     index += 1
             self.__subjects_CRN[subject_iteration] = tmp_subject_list
-        # print(list(Course.objects.all()))
-        # print(len(list(Course.objects.all())))
-        # print(Course.objects.get(CRN=20003).course_name)
-        # print(self.subjects)
-        # print(count)
-
-        # print(self.__subjects_CRN)

@@ -1,6 +1,5 @@
 from django.contrib import admin
 from django.urls import path
-from MODULE_scraping.WM_Subject import Subject_Scraper
 
 from MODULE_pages.views import home_view, classes_view, about_view, register_view,logout_view
 
@@ -17,6 +16,3 @@ urlpatterns = [
 ] 
 
 #Can run code here ONCE
-
-
-

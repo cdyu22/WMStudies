@@ -33,8 +33,8 @@ class UserAdminCreationForm(forms.ModelForm):
     fields, plus a repeated password.
     """
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
-    password2 = forms.CharField(label='Password confirmation', widget=forms.PasswordInput)
-    phone_number = forms.CharField()
+    password2 = forms.CharField(label='Password Confirmation', widget=forms.PasswordInput)
+    phone_number = forms.CharField(max_length=10,min_length=10)
 
     class Meta:
         model = User
