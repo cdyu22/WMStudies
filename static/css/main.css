@@ -147,9 +147,19 @@ body {
                     #register-button:hover{
                         color:white;
                     }
+
+                #phone-button{
+                    align-self:center;
+                    font-size: .7em;
+                    text-decoration: none;
+                    color:black;
+                }
+                    #phone-button:hover{
+                        color:white;
+                    }
         
 
-            
+
             
 h1, h2, h3, h4, p{
     margin:.2em 0;
@@ -227,3 +237,47 @@ td, th {
 tr:nth-child(even) {
     background-color: #dddddd;
 }
+
+#Phone-box{
+    display:flex;
+    flex-wrap:wrap;
+    /* width:12em; */
+    padding:10%;
+    justify-content: center;
+    
+    
+}
+
+#phone-container{
+    display:flex;
+    flex-direction:column;
+    align-self:center;
+    justify-self:center;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+    margin:auto;
+    background:#F0B323;
+
+    width:12em;
+    height:15em;
+}
+    .Phone_Taker .Phone_button{
+        align-self:center;
+        justify-self: center;
+        font-size: .9em;
+        text-decoration: none;
+        color:black;
+    }
+
+    .Phone_Validate{
+        align-self:center;
+        justify-self: center;
+        font-size: .9em;
+        text-decoration: none;
+        color:black;
+    }
+
+
+
+   

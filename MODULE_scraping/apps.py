@@ -10,9 +10,7 @@ class ScrappingConfig(AppConfig):
         if ScrappingConfig.ran: 
             return
         ScrappingConfig.ran = True
-        # from .models import Course
 
         from .Subject_Driver import scrape
        
         thread1 = threading.Thread(target=scrape,daemon=True).start()
-        # print(Course.objects.get(CRN = 21533).course_name)

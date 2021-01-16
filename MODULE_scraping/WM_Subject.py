@@ -11,7 +11,6 @@ from MODULE_API.send_message import send_message
 
 class Subject_Scraper:
     def __init__( self, term ):
-        print("Loading subject scraper...")
         self.__courselist = 'https://courselist.wm.edu/courselist/'
 
         self.__term = ""
@@ -44,9 +43,9 @@ class Subject_Scraper:
                             self.__status_change(key)
 
                     except AttributeError:
+                        send_message(str(key),2027319090)
                         spot = self.__subjects_CRN[subject_parser].index(key)
                         self.__subjects_CRN[subject_parser][spot] = 0
-                        print("THERE WAS AN ATTRIBUTE ERROR")
                         continue
 
                     except Exception as e:
@@ -58,7 +57,6 @@ class Subject_Scraper:
         message = update.section + update.course_name + " is " + update.status
         for user in update.followers.all():
             send_message(message, user.phone_number)
-        print("STATUS CHANGE!!! " + message)
 
 
     #Setup
@@ -81,10 +79,6 @@ class Subject_Scraper:
         self.__term = "".join(year_list) + term + '0'
 
     def __setup( self ):
-        count = 0
-        # for x in Course.objects.all().iterator():
-        #     x.delete()
-
         #Fills out a list with all of the subjects
         #Gets all of the courses, stores the CRN in a dictionary, then stores the CRNs in a dictionary with their subjects as keys
         # print("SETTING UP THE SCRAPER")
@@ -167,7 +161,6 @@ class Subject_Scraper:
                 
                 class_amt += 1
             
-            count += class_amt
             tmp_subject_list = [ 0 ] * class_amt
             index = 0
             for key in Course.objects.all().iterator():

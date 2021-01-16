@@ -1,0 +1,23 @@
+{% extends 'base.html'%}
+
+{% block content %}
+<div id="Phone-box">
+    <div id="phone-container">
+        <form method="post">
+            {% csrf_token %}
+                <div class="Phone_Taker"><h4>Phone Number</h4><input name="Phone_Taker" type="text" placeholder="Phone" maxlength="10" size="10"></div>
+                <div class="Phone_Validate"><h4>Validate Number</h4><input name="Phone_Validate" type="text" placeholder="Phone" maxlength="10" size="10"></div>     
+            
+            <input class="Phone_button" value="Submit" type="submit"></li>
+        </form>
+        {% if messages %}
+                <p id="messages" style="font-size: 10pt;">
+                    {% for message in messages %}
+                    {{ message }}
+                    {% endfor %}
+                </p>
+            {% endif %}
+    </div>
+</div>
+
+{% endblock %}

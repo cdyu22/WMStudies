@@ -12,11 +12,16 @@
                     the classes and checks to see their status, sending you a message via SMS whenever 
                     a class you follow changes its status </p>
 
-                <h3>Registration</h3>
-                <p>To start, register your name and phone number, which is needed to send you messages. The 
-                    only time that your phone number will be used is for informing you of class status changes. </p>
+                <h3>Sign Up</h3>
+                <p>To start, register your username and phone number, which is needed to send you messages. The 
+                    only time that your phone number will be used is for informing you of class status changes.
+                    Only U.S. phone numbers are compatible at this time. </p>
 
                 <h3>Classes</h3>
+                <p>Once you have signed up, simply go to Class Search and type in the CRNs of all of the courses 
+                    that you would like to follow. If you input your phone correctly, you will receive a message
+                    when the status changes.
+                </p>
             </div>
                 
         </div>
@@ -26,6 +31,7 @@
                 <div id="logged-in">
                     <h3><i>Logged in as {{request.user}}</i></h3>
                     <a id="logout-button" href="{% url 'logout' %}"><i>Logout</i></a>
+                    <a id="phone-button" href="{% url 'phone_change' %}"><i>Change Phone Number</i></a>
                 </div>
                 
             {% else %}

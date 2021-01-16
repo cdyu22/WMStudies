@@ -2,36 +2,9 @@
 
 {% block content %}
 
-About this...
-
-<p>
-    {{ akey|title }}, {{ anumber }} , {{ alist }}
+<p id="textarea">
+    I created this project to hopefully allow William & Mary students the ability to be informed when a class that interests them 
+    opens up without paying for Coursicle.
 </p>
-<!-- Context variable, what variabels we passed into our context -->
-
-<ul>
-    <li>Item 1</li>
-    <li>Item 2</li>
-</ul>
-
-<ul>
-    {% for my_sub_item in alist %}
-        <li>{{ forloop.counter}} - {{my_sub_item}}</li>
-    {% endfor %}
-</ul>
-
-
-<ul>
-{% for my_sub_item in alist %}
-    {% if anumber == 100%}
-        <li>{{ forloop.counter}} - {{ my_sub_item|add:22 }}</li>
-    {% elif anumber == 100%}
-    <li>{{ forloop.counter}} - {{ my_sub_item|add:22 }}</li>    
-    {% else %}
-        <li>{{forloop.count}} - { my_sub_item }}</li>
-    {%endif%}
-    
-{% endfor %}
-</ul>
 
 {% endblock %}
