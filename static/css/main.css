@@ -7,7 +7,7 @@
 html, body{
     min-height: 80%;
     height:80%;
-    font-family:"Source Sans Pro", Arial, Helvetica, sans-serif;
+    font-family:sans-serif;
     font-size: 14pt;
     font-weight: 400;
     line-height: 1.65;
@@ -142,7 +142,7 @@ body {
                     text-decoration: none;
                     color:black;
                     font-size: .75em;
-                    margin-left:.9em;
+                    margin-left:.5em;
                 }
                     #register-button:hover{
                         color:white;
@@ -197,6 +197,7 @@ h1, h2, h3, h4, p{
       background-color: #F0B323;   
       margin:auto;
       padding:5%;
+      margin-top:15%;
     }
     #CRN-container{
         display:flex;
@@ -218,7 +219,6 @@ h1, h2, h3, h4, p{
         text-decoration: none;
         margin: 0;
         padding:inherit;
-        
     }
 
 table {

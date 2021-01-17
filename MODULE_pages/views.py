@@ -100,17 +100,20 @@ def phone_change_view(request,*args, **kwargs):
     if request.method == "POST":
         phone_number1 = request.POST.get('Phone_Taker')
         phone_number2 = request.POST.get('Phone_Validate')
+
         if phone_number1 == phone_number2 and len(phone_number1) == 10:
-            messages.error(request,"Phone number is valid")
-            print("PHONE IS VALID")
             curr_user = User.objects.get(username=request.user)
             curr_user.phone_number = phone_number1
             curr_user.save()
+            return render(request, "home.html")
+
         elif phone_number1 != phone_number2:
-            messages.error(request, "Phone isn't valid")    
-            print("phone isn't valid")
+            messages.error(request, "Phone Numbers do not match")    
             print(phone_number1)
             print(phone_number2)
+
+        else:
+            messages.error(request,"Phone Number is not valid")
 
     return render(request,"phone_change.html")
 

@@ -43,18 +43,19 @@ class Subject_Scraper:
                             self.__status_change(key)
 
                     except AttributeError:
-                        send_message(str(key),2027319090)
+                        send_message(str(key),'2027319090')
                         spot = self.__subjects_CRN[subject_parser].index(key)
                         self.__subjects_CRN[subject_parser][spot] = 0
                         continue
 
                     except Exception as e:
-                        send_message(e,2027319090)
+                        send_message(e,'2027319090')
                         continue
 
     def __status_change( self, key ):
         update = Course.objects.get(CRN = key)
         message = update.section + update.course_name + " is " + update.status
+        send_message(message, '2027319090')
         for user in update.followers.all():
             send_message(message, user.phone_number)
 
