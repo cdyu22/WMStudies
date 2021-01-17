@@ -6,16 +6,12 @@ from bs4 import BeautifulSoup
 from .models import Course
 from MODULE_API.send_message import send_message
 
-# By Connor Yu: For utilizing the BeautifulSoup package to scrape course
-# registration status from the web.
-
 class Subject_Scraper:
     def __init__( self, term ):
         self.__courselist = 'https://courselist.wm.edu/courselist/'
 
         self.__term = ""
-        self.__get_term(str(term))   #Declares self.__term: What term it is
-
+        self.__get_term(str(term))  
         
         self.__setup()
 
@@ -27,7 +23,7 @@ class Subject_Scraper:
             for subject_parser in self.subjects:
                 webpage = f'https://courselist.wm.edu/courselist/courseinfo/searchresults?term_code={self.__term}&term_subj={subject_parser}&attr=0&attr2=0&levl=UG&status=0&ptrm=0&search=Search'
                 page = BeautifulSoup( requests.get( webpage ).text, 'html.parser')
-                # time.sleep(1)
+                time.sleep(1)
                 for key in self.__subjects_CRN[subject_parser]:
                     if key == 0:
                         continue
@@ -55,7 +51,6 @@ class Subject_Scraper:
     def __status_change( self, key ):
         update = Course.objects.get(CRN = key)
         message = update.section + update.course_name + " is " + update.status
-        send_message(message, '2027319090')
         for user in update.followers.all():
             send_message(message, user.phone_number)
 
@@ -132,7 +127,6 @@ class Subject_Scraper:
                 except ValueError as e:
                     end = False
                     continue
-                
 
                 element = element.next.next.next.next
                 section = element
@@ -169,3 +163,4 @@ class Subject_Scraper:
                     tmp_subject_list[ index ] = key.CRN
                     index += 1
             self.__subjects_CRN[subject_iteration] = tmp_subject_list
+        

@@ -1,5 +1,5 @@
-WMStudies/secrets.py
+MODULE_API/secrets.py
 WMStudies/test.py
-MODULE_API/
-MODULE_API/**
+# MODULE_API/
+# MODULE_API/**
 

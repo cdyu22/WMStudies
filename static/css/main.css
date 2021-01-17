@@ -241,11 +241,8 @@ tr:nth-child(even) {
 #Phone-box{
     display:flex;
     flex-wrap:wrap;
-    /* width:12em; */
     padding:10%;
     justify-content: center;
-    
-    
 }
 
 #phone-container{
