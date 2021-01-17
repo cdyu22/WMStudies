@@ -1,8 +1,8 @@
 from twilio.rest import Client
-from .secrets import account_sid, auth_token
+from decouple import config
 
 def send_message(class_message, phone_number):
-    client = Client(account_sid,auth_token)
+    client = Client(config('account_sid'),config('auth_token'))
     message = client.messages \
                 .create(
                      body= class_message,

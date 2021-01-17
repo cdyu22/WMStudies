@@ -12,7 +12,8 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 import os.path
-from celery import Celery
+from decouple import config
+from django.contrib.auth import SESSION_KEY
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -23,10 +24,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '3l(rrg+hvd8w%&**c*%%cljs(&*xa0dz(zxgtezc+pd$cx^zk9'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -128,16 +129,19 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
-# STATIC_ROOT = os.path.join(BASE_DIR, 'static') #What we need for production? DIRs is maybe for deployment?
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
-    "WMStudies/static"
-]
+STATIC_ROOT = os.path.join(BASE_DIR, 'static') #What we need for production? DIRs is maybe for deployment?
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, 'static'),
+#     "WMStudies/static"
+# ]
 
-STATICFILES_FINDERS = (
-    'django.contrib.staticfiles.finders.FileSystemFinder',
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-)
+# STATICFILES_FINDERS = (
+#     'django.contrib.staticfiles.finders.FileSystemFinder',
+#     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+# )
 
 AUTH_USER_MODEL = "MODULE_users.User"
 
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = False
+SECURE_SSL_REDIRECT = True
