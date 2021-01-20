@@ -18,6 +18,7 @@ class Subject_Scraper:
         self.search()
 
     def search( self ):
+        send_message("Started searching","2027319090")
         while(True):
             print("Searching... " + str(os.getpid()))
             for subject_parser in self.subjects:
@@ -75,6 +76,7 @@ class Subject_Scraper:
         self.__term = "".join(year_list) + term + '0'
 
     def __setup( self ):
+        send_message("Starting Setup","2027319090")
         #Fills out a list with all of the subjects
         #Gets all of the courses, stores the CRN in a dictionary, then stores the CRNs in a dictionary with their subjects as keys
         # print("SETTING UP THE SCRAPER")
@@ -164,4 +166,6 @@ class Subject_Scraper:
                 if key.subject == subject_iteration:
                     tmp_subject_list.append(key.CRN)
             self.__subjects_CRN[subject_iteration] = tmp_subject_list
+        
+        send_message("Done with Setup","2027319090")
         
