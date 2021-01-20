@@ -5,5 +5,4 @@ WMStudies/test.py
 
 .env
 db.sqlite3
-.settings
-WMStudies
+WMStudies/**

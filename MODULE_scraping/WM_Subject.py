@@ -38,8 +38,8 @@ class Subject_Scraper:
                             update.save() 
                             self.__status_change(key)
 
-                    except AttributeError:
-                        send_message(str(key),'2027319090')
+                    except AttributeError as e:
+                        send_message(str(key) + e,'2027319090')
                         spot = self.__subjects_CRN[subject_parser].index(key)
                         self.__subjects_CRN[subject_parser][spot] = 0
                         continue
@@ -94,8 +94,9 @@ class Subject_Scraper:
         #Allocate the spaces. 
         subject_index = 0
         for option in subject_options.find_all( 'option' ):
+            print(option)
             #There exists an option value of 0 to signify all subjects.
-            if option[ 'value' ] == "0":
+            if option[ 'value' ] == "0" or option['value'] == "GEOL":
                 continue
 
             # print(option[ 'value' ])
@@ -112,11 +113,13 @@ class Subject_Scraper:
             section = ""
             course_name = ""
             status = 'OPEN'
-            class_amt = 0
 
             element = page.find( id = "results" )
-            for i in range( 19 ):
-                element = element.next.next.next
+            try:
+                for i in range( 19 ):
+                    element = element.next.next.next
+            except: 
+                end = False
             
             #After this, will have all courses for that subject
             end = True
@@ -154,13 +157,11 @@ class Subject_Scraper:
                
                 element = element.next.next.next.next.next.next
                 
-                class_amt += 1
             
-            tmp_subject_list = [ 0 ] * class_amt
-            index = 0
+            
+            tmp_subject_list = []
             for key in Course.objects.all().iterator():
                 if key.subject == subject_iteration:
-                    tmp_subject_list[ index ] = key.CRN
-                    index += 1
+                    tmp_subject_list.append(key.CRN)
             self.__subjects_CRN[subject_iteration] = tmp_subject_list
         
